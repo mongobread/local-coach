@@ -1,0 +1,36 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model HealthLog {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  rawInput  String   // Exactly what you told the AI
+  category  String   // "WEIGHT", "MEAL", "BP", or "GENERAL"
+  
+  // Optional metrics parsed by the AI
+  weight    Float?   
+  systolic  Int?     
+  diastolic Int?     
+  calories  Int?     
+  
+  analysis  String?  // The local AI coach's feedback/breakdown
+}
+
+model ChatMessage {
+  id        String   @id @default(uuid())
+  role      String   // "user", "assistant", "system", or "tool"
+  content   String
+  createdAt DateTime @default(now())
+}
